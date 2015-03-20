@@ -19,4 +19,5 @@ ADD init.sh /opt/opsweekly/init.sh
 RUN chmod u+x /opt/opsweekly/init.sh && \
     rm /opt/opsweekly/phplib/config.php.example
 
+EXPOSE 80
 ENTRYPOINT "/opt/opsweekly/init.sh"
