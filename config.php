@@ -45,7 +45,7 @@ function getUsername() {
  **/
 $teams = array(
     $hostname => array(
-        "root_url" => "/",
+        "root_url" => ".",
         "display_name" => "Ops",
         "email_report_to" => "ops@mycompany.com",
         "database" => "opsweekly",
