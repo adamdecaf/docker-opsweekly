@@ -10,6 +10,8 @@ $mysql_pass = "opsweekly";
 // for weekly reports
 $email_from_domain = "ashannon.us";
 
+$hostname = "192.168.59.103";
+
 /**
  * Authentication configuration
  * Nagdash must know who is requesting pages, as every update entry etc is unique
@@ -42,8 +44,8 @@ function getUsername() {
  *          e.g. Match this to Pagerduty if you use that for scheduling.
  **/
 $teams = array(
-    'localhost' => array(
-        "root_url" => "/opsweekly",
+    $hostname => array(
+        "root_url" => "/",
         "display_name" => "Ops",
         "email_report_to" => "ops@mycompany.com",
         "database" => "opsweekly",
@@ -150,10 +152,10 @@ $error_log_file = "/opt/opsweekly/opsweekly_debug.log";
 // Dev FQDN
 // An alternative FQDN that will be accepted by Opsweekly for running a development copy elsewhere
 // Fed into preg_replace so regexes are allowed
-$dev_fqdn = "/localhost/";
+$dev_fqdn = "/$hostname/";
 
 // The prod FQDN is then subsituted in place of the above string.
-$prod_fqdn = "localhost";
+$prod_fqdn = $hostname;
 
 // Global configuration for irccat, used to send messages to IRC about weekly meetings.
 $irccat_hostname = '';
