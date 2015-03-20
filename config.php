@@ -8,7 +8,7 @@ $mysql_pass = "opsweekly";
 
 // The domain name your company uses to send email from, used for a reply-to address
 // for weekly reports
-$email_from_domain = "adam@ashannon.us";
+$email_from_domain = "ashannon.us";
 
 /**
  * Authentication configuration
@@ -18,18 +18,10 @@ $email_from_domain = "adam@ashannon.us";
  * that will return a plain text username string to Nagdash, e.g. "ldenness" or "bsmith"
  *
  * Below are two examples to get you started.
-
+ */
 function getUsername() {
-    // Make sure this is relevant to your environment.
-    // For example, if you use SSO then maybe you have a HTTP header set, or a cookie.
-    return $_SERVER['HTTP_X_USERNAME'];
+    return $_SERVER['PHP_AUTH_USER']; // contians username with HTTP Basic auth
 }
-
-function getUsername() {
-    // Use the PHP_AUTH_USER header which contains the username when Basic auth is used.
-    return $_SERVER['PHP_AUTH_USER'];
-}
-**/
 
 /**
  * Team configuration
@@ -50,68 +42,22 @@ function getUsername() {
  *          e.g. Match this to Pagerduty if you use that for scheduling.
  **/
 $teams = array(
-
-
-    # "opsweekly.mycompany.com" => array(
-    #     "root_url" => "/opsweekly",
-    #     "display_name" => "Ops",
-    #     "email_report_to" => "ops@mycompany.com",
-    #     "database" => "opsweekly",
-    #     "oncall" => array(
-    #         "provider" => "splunk",
-    #         "provider_options" => array(
-    #             "splunk_index" => 'nagios',
-    #             "splunk_search" => 'contact="#logged_in_username#_pager"',
-    #         ),
-    #         "timezone" => "America/New_York",
-    #         "start" => "friday 18:00",
-    #         "end" => "friday 18:00",
-    #     ),
-    #     "weekly_hints" => array("jira", "github"),
-    #     "irc_channel" => "#ops"
-    # ),
-    # "anotherweekly.mycompany.com" => array(
-    #     "display_name" => "Team2",
-    #     "email_report_to" => "team2@mycompany.com",
-    #     "database" => "team2weekly",
-    #     "weekly_hints" => array("jira", "github"),
-    #     "oncall" => false
-    # ),
-    # "thirdweekly.mycompany.com" => array(
-    #     "display_name" => "Third",
-    #     "email_report_to" => "third@mycompany.com",
-    #     "database" => "thirdweekly",
-    #     "weekly_hints" => array("jira", "github"),
-    #     "oncall" => array(
-    #         "provider" => "pagerduty",
-    #         "provider_options" => array(
-    #             // Single PagerDuty Service id
-    #             "pagerduty_service_id" => 'AB12CDE',
-    #             // Multiple PagerDuty Service ids are set in the format array('XXYYZZ1', 'AABBCC2') etc...
-    #             // "pagerduty_service_id" => array('AB12CDE', 'CC23DDE'),
-    #         ),
-    #         "timezone" => "America/New_York",
-    #         "start" => "monday 12:00",
-    #         "end" => "monday 12:00",
-    #     ),
-    # ),
-    # "forthweekly.mycompany.com" => array(
-    #     "display_name" => "Forth",
-    #     "email_report_to" => "forth@mycompany.com",
-    #     "database" => "forthweekly",
-    #     "weekly_hints" => array("jira", "github"),
-    #     "oncall" => array(
-    #         "provider" => "logstash",
-    #         "provider_options" => array(
-    #             "notification-user-map" => array(
-    #                 "username" => "nagioscontact",
-    #             ),
-    #         ),
-    #         "timezone" => "America/New_York",
-    #         "start" => "monday 12:00",
-    #         "end" => "monday 12:00",
-    #     ),
-    # ),
+    'localhost' => array(
+        "root_url" => "/opsweekly",
+        "display_name" => "Ops",
+        "email_report_to" => "ops@mycompany.com",
+        "database" => "opsweekly",
+        "oncall" => array(
+            "provider" => "pagerduty",
+            "provider_options" => array(
+                "pagerduty_service_id" => 'AB12CDE',
+            ),
+            "timezone" => "America/Chicago",
+            "start" => "thursday 15:00",
+            "end" => "thursday 15:00"
+        ),
+        "weekly_hints" => array("github")
+    )
 );
 
 /**
@@ -133,25 +79,7 @@ $weekly_providers = array(
         "options" => array(
             "github_url" => "https://github.com",
         ),
-    ),
-    "jira" => array(
-        "display_name" => "JIRA Tickets",
-        "lib" => "providers/weekly/jira.php",
-        "class"=> "JIRAHints",
-        "options" => array(
-            "jira_api_url" => "https://jira.mycompany.com/rest/api/2",
-            "jira_url" => "https://jira.mycompany.com",
-            "username" => "jira_api_login",
-            "password" => "jira_api_password",
-        ),
-    ),
-    "example" => array(
-        "display_name" => "Example HTML",
-        "lib" => "providers/weekly/example.php",
-        "class" => "ExampleHints",
-        "options" => array(
-        ),
-    ),
+    )
 );
 
 
@@ -161,26 +89,6 @@ $weekly_providers = array(
  * user received.
  **/
 $oncall_providers = array(
-    "splunk" => array(
-        "display_name" => "Splunk",
-        "lib" => "providers/oncall/splunk.php",
-        "options" => array(
-            "base_url" => "https://splunk.mycompany.com:8089",
-            "username" => "splunkapiusername",
-            "password" => "splunkapipassword",
-        ),
-    ),
-    "example" => array(
-        "display_name" => "Example",
-        "lib" => "providers/oncall/example.php",
-    ),
-    "logstash" => array(
-        "display_name" => "Logstash",
-        "lib" => "providers/oncall/logstash.php",
-        "options" => array(
-            "base_url" => "http://localhost:9200",
-        ),
-    ),
     "pagerduty" => array(
         "display_name" => "Pagerduty",
         "lib" => "providers/oncall/pagerduty.php",
@@ -188,10 +96,10 @@ $oncall_providers = array(
             "base_url" => "https://mycompany.pagerduty.com/api/v1",
             // Supports two auth methods. Username/password or apikey.
             // If you define apikey, then the username/password will be ignored
-            "username" => "mylogin@mycompany.com",
-            "password" => "password",
+            // "username" => "mylogin@mycompany.com",
+            // "password" => "password",
             // uncomment and define if you use apikeys
-            // "apikey" => "XXXXXX",
+            "apikey" => "XXXXXX",
         ),
     ),
 );
@@ -218,21 +126,6 @@ $oncall_providers = array(
  *                  one user, but to the whole of opsweekly E.g. A web URL or other data.
  **/
 $sleep_providers = array(
-    "up" => array(
-        "display_name" => "Jawbone UP",
-        "description" => "The band that tracks your sleep",
-        "logo" => "/assets/sleep/up.png",
-        "options" => array(
-            "graphite_prefix" => array(
-                "type" => "text",
-                "name" => "Graphite Prefix",
-                "description" => "The root path to your sleep stats",
-                "placeholder" => "ops.ldenness.sleep"
-            )
-        ),
-        "lib" => "providers/sleep/SleepUP.php",
-        "graphite_host" => "http://graphite.mycompany.com"
-    ),
     "fitbit" => array(
         "display_name" => "fitbit",
         "description" => "the other sleep tracker",
@@ -252,14 +145,15 @@ $sleep_providers = array(
 $search_results_per_page = 25;
 
 // Path to disk where a debug error log file can be written
-$error_log_file = "/var/log/httpd/opsweekly_debug.log";
+$error_log_file = "/opt/opsweekly/opsweekly_debug.log";
 
 // Dev FQDN
 // An alternative FQDN that will be accepted by Opsweekly for running a development copy elsewhere
 // Fed into preg_replace so regexes are allowed
-$dev_fqdn = "/(\w+).vms.mycompany.com/";
+$dev_fqdn = "/localhost/";
+
 // The prod FQDN is then subsituted in place of the above string.
-$prod_fqdn = "mycompany.com";
+$prod_fqdn = "localhost";
 
 // Global configuration for irccat, used to send messages to IRC about weekly meetings.
 $irccat_hostname = '';
