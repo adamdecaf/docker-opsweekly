@@ -11,9 +11,6 @@ __Environmental Variables__
 - `MYSQL_ROOT_PASSWORD` from the official [mysql image](https://registry.hub.docker.com/_/mysql/)
 - `OPSWEEKLY_MYSQL_PASSWORD` (the `Rakefile` has it set as 'opsweekly')
 
-## Todo
+## Details
 
-- optionally install providers
-  - I figure reading env variables and if set run provider specific setup
-  - fitbit
-  - pagerduty
+- Sits behind apache2 with php5 installed on debian wheezy
